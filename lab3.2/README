@@ -1,0 +1,11 @@
+lab3.2.bin is the sample solution of LAB3.2
+Download lab3.2.bin and q.
+Run q
+===========================================
+Required STUDENTs outputs:
+1. can display lowercase lines
+2. can display uppercase lines
+3. can detect Control-C to print "Control-C"
+4. can detect Control-D to enter c = 0x4 into input buffer
+5. can handle CapsLock key, converts lowercase to uppercase and vice versa
+===========================================
