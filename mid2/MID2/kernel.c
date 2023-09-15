@@ -69,7 +69,23 @@ int kfork(int func, int priority)
   p->priority = priority;
   p->ppid = running->pid;
   p->parent = running;
-  p->child = p->sibling = 0;
+  p->sibling = 0;
+  p->child = 0;
+
+  // insert into parent
+  if (p->parent->child == 0)
+  {
+    p->parent->child = p;
+  }
+  else
+  {
+    PROC* cur = p->parent->child;
+    while (cur->sibling)
+    {
+      cur = cur->sibling;
+    }
+    cur->sibling = p;
+  }
   
   for (i=1; i<15; i++)
       p->kstack[SSIZE-i] = 0;
@@ -96,6 +112,49 @@ int scheduler()
   }
 }
 
+char* str_status(PROC* p)
+{
+  if (p == running)
+  {
+    return "RUNNING";
+  }
+  else
+  {
+    switch (p->status)
+    {
+      case FREE:
+        return "FREE";
+        break;
+      case READY:
+        return "READY";
+        break;
+      case SLEEP:
+        return "SLEEP";
+        break;
+      case BLOCK:
+        return "BLOCK";
+        break;
+      case ZOMBIE:
+        return "ZOMBIE";
+        break;
+    }
+  }
+
+  return "ERROR";
+}
+
+int my_ps()
+{
+  printf("PID\tPPID\tSTATUS\n");
+  printf("---\t----\t------\n");
+  for (int i = 0; i < NPROC; i++)
+  {
+    printf(" %d\t %d  \t", proc[i].pid, proc[i].ppid);
+
+    printf("%s\n", str_status(&proc[i]));
+  }
+}
+
 // code of processes
 int body()
 {
@@ -107,19 +166,84 @@ int body()
     printf("proc %d running  parent=%d\n", running->pid, running->ppid);
 
     // write code to print childList=[pid, status]->...->NULL
+    PROC* cur = running->child;
+    printf("childList =");
+    while (cur)
+    {
+      char *status;
+      printf("[%d, %s]->", cur->pid, str_status(cur));
+      cur = cur->sibling;
+    }
+    printf("NULL\n");
     
     printList("freeList  ", freeList);
     printList("readyQueue", readyQueue);
     printsleepList(sleepList);
 	
-    printf("Enter a command [switch|fork] : ");
+    printf("Enter a command [ps|switch|fork|sleep|wakeup|exit|wait] : ");
     kgets(cmd);
     printf("\n");
     
     if (strcmp(cmd, "switch")==0)
-       tswitch();
+    {
+      tswitch();
+    }
     else if (strcmp(cmd, "fork")==0)
-       kfork((int)body, 1);
+    {
+      kfork((int)body, 1);
+    }
+    else if (strcmp(cmd, "ps") == 0)
+    {
+      my_ps();
+    }
+    else if (strcmp(cmd, "sleep") == 0)
+    {
+      if (running->pid == 1)
+      {
+        printf("P1 can't sleep by command\n");
+      }
+      else
+      {
+        printf("input an event value to sleep : ");
+        kgets(cmd);
+        printf("\n");
+        ksleep(atoi(cmd));
+      }
+    }
+    else if (strcmp(cmd, "wakeup") == 0)
+    {
+      printf("input an event value to wakeup : ");
+      kgets(cmd);
+      printf("\n");
+      kwakeup(atoi(cmd));
+    }
+    else if (strcmp(cmd, "exit") == 0)
+    {
+      if (running->pid == 1)
+      {
+        printf("P1 never die\n");
+      }
+      else
+      {
+        printf("input an exitCode value : ");
+        kgets(cmd);
+        printf("\n");
+        kexit(atoi(cmd));
+      }
+    }
+    else if (strcmp(cmd, "wait") == 0)
+    {
+      int status = -1;
+      int pid = kwait(&status);
 
+      if (pid == -1)
+      {
+        printf("wait error : no child\n");
+      }
+      else
+      {
+        printf("P%d waited for a ZOMBIE P%d status=%d\n", running->pid, pid, status);
+      }
+    }
   }
 }
