@@ -18,21 +18,29 @@ int ksleep(int event)
 int kwakeup(int event)
 {
   int SR = int_off();
-  PROC* prev = 0;
+
+  // remove all procs at front of sleep list where proc->event == event
   PROC* cur = sleepList;
+  while (cur && cur->event == event)
+  {
+    sleepList = cur->next;
+
+    cur->status = READY;
+    printf("wakeup %d\n", cur->pid);
+    enqueue(&readyQueue, cur);
+
+    cur = sleepList;
+  }
+
+  // Preconditions:
+  // 1) any proc->event == event is not at beginning of sleepList
+  // 2) cur = sleepList
+  PROC* prev = 0;
   while (cur)
   {
     if (cur->event == event)
     {
-      if (prev == 0)
-      {
-        // remove from front of list
-        sleepList = 0;
-      }
-      else
-      {
-        prev->next = cur->next;
-      }
+      prev->next = cur->next;
 
       cur->status = READY;
       printf("wakeup %d\n", cur->pid);
