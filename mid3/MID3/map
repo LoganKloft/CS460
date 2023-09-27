@@ -26,132 +26,133 @@ Linker script and memory map
 
                 0x0000000000010000                . = 0x10000
 
-.text           0x0000000000010000     0x21a0
+.text           0x0000000000010000     0x2204
  ts.o()
- .text          0x0000000000010000       0xfc ts.o
+ .text          0x0000000000010000      0x13c ts.o
                 0x0000000000010000                reset_handler
-                0x0000000000010048                tswitch
-                0x000000000001006c                int_on
-                0x0000000000010074                int_off
-                0x0000000000010088                lock
-                0x0000000000010098                unlock
-                0x00000000000100a8                getcpsr
-                0x00000000000100b0                vectors_start
-                0x00000000000100ec                vectors_end
- .data          0x00000000000100fc        0x0 ts.o
- .bss           0x00000000000100fc        0x0 ts.o
- .debug_line    0x00000000000100fc       0x6f ts.o
- .debug_info    0x000000000001016b       0x26 ts.o
- .debug_abbrev  0x0000000000010191       0x14 ts.o
- *fill*         0x00000000000101a5        0x3 
+                0x0000000000010074                mytswitch
+                0x0000000000010088                tswitch
+                0x00000000000100ac                int_on
+                0x00000000000100b4                int_off
+                0x00000000000100c8                lock
+                0x00000000000100d8                unlock
+                0x00000000000100e8                getcpsr
+                0x00000000000100f0                vectors_start
+                0x000000000001012c                vectors_end
+ .data          0x000000000001013c        0x0 ts.o
+ .bss           0x000000000001013c        0x0 ts.o
+ .debug_line    0x000000000001013c       0x81 ts.o
+ .debug_info    0x00000000000101bd       0x26 ts.o
+ .debug_abbrev  0x00000000000101e3       0x14 ts.o
+ *fill*         0x00000000000101f7        0x1 
  .debug_aranges
-                0x00000000000101a8       0x20 ts.o
- .debug_str     0x00000000000101c8       0x2e ts.o
+                0x00000000000101f8       0x20 ts.o
+ .debug_str     0x0000000000010218       0x2e ts.o
  .ARM.attributes
-                0x00000000000101f6       0x22 ts.o
- .iplt          0x0000000000010218        0x0 ts.o
- .rel.iplt      0x0000000000010218        0x0 ts.o
- .igot.plt      0x0000000000010218        0x0 ts.o
+                0x0000000000010246       0x22 ts.o
+ .iplt          0x0000000000010268        0x0 ts.o
+ .rel.iplt      0x0000000000010268        0x0 ts.o
+ .igot.plt      0x0000000000010268        0x0 ts.o
  *(.text .rodata)
- .text          0x0000000000010218     0x1db0 t.o
-                0x0000000000010218                strlen
-                0x0000000000010270                strcmp
-                0x0000000000010328                strcpy
-                0x0000000000010390                atoi
-                0x0000000000010408                geti
-                0x000000000001043c                getproc
-                0x0000000000010488                putproc
-                0x00000000000104cc                enqueue
-                0x00000000000105b4                dequeue
-                0x0000000000010600                printQ
-                0x0000000000010674                printSleepList
-                0x00000000000106e8                printList
-                0x0000000000010754                kbd_init
-                0x00000000000107f0                kbd_handler
-                0x0000000000010950                kgetc
-                0x0000000000010a00                kgets
-                0x0000000000010a8c                fbuf_init
-                0x0000000000010ba4                clrpix
-                0x0000000000010c10                setpix
-                0x0000000000010dd0                dchar
-                0x0000000000010ecc                scroll
-                0x0000000000010f50                kpchar
-                0x0000000000010fa8                erasechar
-                0x0000000000011054                clrcursor
-                0x000000000001106c                putcursor
-                0x00000000000110ac                kputc
-                0x0000000000011218                kprints
-                0x0000000000011268                krpx
-                0x0000000000011304                kprintx
-                0x000000000001134c                krpu
-                0x0000000000011408                kprintu
-                0x0000000000011450                kprinti
-                0x0000000000011498                kprintf
-                0x0000000000011628                undef_handler
-                0x0000000000011634                swi_handler
-                0x0000000000011640                prefetch_abort_handler
-                0x000000000001164c                data_abort_handler
-                0x0000000000011658                fiq_handler
-                0x0000000000011664                init
-                0x000000000001179c                kfork
-                0x00000000000118d8                scheduler
-                0x00000000000119e8                kexit
-                0x0000000000011a44                body
-                0x0000000000011ae8                timer_init
-                0x0000000000011be8                timer_handler
-                0x0000000000011ca4                timer_start
-                0x0000000000011d04                timer_clearInterrupt
-                0x0000000000011d44                timer_stop
-                0x0000000000011d90                copy_vectors
-                0x0000000000011dfc                IRQ_handler
-                0x0000000000011e74                main
- .rodata        0x0000000000011fc8      0x1d8 t.o
+ .text          0x0000000000010268     0x1dc4 t.o
+                0x0000000000010268                strlen
+                0x00000000000102c0                strcmp
+                0x0000000000010378                strcpy
+                0x00000000000103e0                atoi
+                0x0000000000010458                geti
+                0x000000000001048c                getproc
+                0x00000000000104d8                putproc
+                0x000000000001051c                enqueue
+                0x0000000000010604                dequeue
+                0x0000000000010650                printQ
+                0x00000000000106c4                printSleepList
+                0x0000000000010738                printList
+                0x00000000000107a4                kbd_init
+                0x0000000000010840                kbd_handler
+                0x00000000000109a0                kgetc
+                0x0000000000010a50                kgets
+                0x0000000000010adc                fbuf_init
+                0x0000000000010bf4                clrpix
+                0x0000000000010c60                setpix
+                0x0000000000010e20                dchar
+                0x0000000000010f1c                scroll
+                0x0000000000010fa0                kpchar
+                0x0000000000010ff8                erasechar
+                0x00000000000110a4                clrcursor
+                0x00000000000110bc                putcursor
+                0x00000000000110fc                kputc
+                0x0000000000011268                kprints
+                0x00000000000112b8                krpx
+                0x0000000000011354                kprintx
+                0x000000000001139c                krpu
+                0x0000000000011458                kprintu
+                0x00000000000114a0                kprinti
+                0x00000000000114e8                kprintf
+                0x0000000000011678                undef_handler
+                0x0000000000011684                swi_handler
+                0x0000000000011690                prefetch_abort_handler
+                0x000000000001169c                data_abort_handler
+                0x00000000000116a8                fiq_handler
+                0x00000000000116b4                init
+                0x00000000000117ec                kfork
+                0x0000000000011928                scheduler
+                0x0000000000011a4c                kexit
+                0x0000000000011aa8                body
+                0x0000000000011b4c                timer_init
+                0x0000000000011c4c                timer_handler
+                0x0000000000011d08                timer_start
+                0x0000000000011d68                timer_clearInterrupt
+                0x0000000000011da8                timer_stop
+                0x0000000000011df4                copy_vectors
+                0x0000000000011e60                IRQ_handler
+                0x0000000000011ed8                main
+ .rodata        0x000000000001202c      0x1d8 t.o
 
-.glue_7         0x00000000000121a0        0x0
- .glue_7        0x00000000000121a0        0x0 linker stubs
+.glue_7         0x0000000000012204        0x0
+ .glue_7        0x0000000000012204        0x0 linker stubs
 
-.glue_7t        0x00000000000121a0        0x0
- .glue_7t       0x00000000000121a0        0x0 linker stubs
+.glue_7t        0x0000000000012204        0x0
+ .glue_7t       0x0000000000012204        0x0 linker stubs
 
-.vfp11_veneer   0x00000000000121a0        0x0
- .vfp11_veneer  0x00000000000121a0        0x0 linker stubs
+.vfp11_veneer   0x0000000000012204        0x0
+ .vfp11_veneer  0x0000000000012204        0x0 linker stubs
 
-.v4_bx          0x00000000000121a0        0x0
- .v4_bx         0x00000000000121a0        0x0 linker stubs
+.v4_bx          0x0000000000012204        0x0
+ .v4_bx         0x0000000000012204        0x0 linker stubs
 
-.data           0x00000000000121a0      0x908
+.data           0x0000000000012204      0x908
  *(.data)
- .data          0x00000000000121a0      0x908 t.o
-                0x00000000000121a0                ltab
-                0x0000000000012210                utab
-                0x0000000000012280                fonts0
-                0x0000000000012aa0                tab
-                0x0000000000012aa4                procsize
+ .data          0x0000000000012204      0x908 t.o
+                0x0000000000012204                ltab
+                0x0000000000012274                utab
+                0x00000000000122e4                fonts0
+                0x0000000000012b04                tab
+                0x0000000000012b08                procsize
 
-.bss            0x0000000000012aa8    0x10368
+.bss            0x0000000000012b0c    0x10368
  *(.bss)
- .bss           0x0000000000012aa8        0x4 t.o
-                0x0000000000012aa8                release
- COMMON         0x0000000000012aac    0x10364 t.o
-                0x0000000000012aac                proc
-                0x0000000000022d2c                kbd
-                0x0000000000022dc0                timer
-                0x0000000000022de4                running
-                0x0000000000022de8                font
-                0x0000000000022dec                fb
-                0x0000000000022df0                readyQueue
-                0x0000000000022df4                sleepList
-                0x0000000000022df8                cursor
-                0x0000000000022dfc                col
-                0x0000000000022e00                ISP
-                0x0000000000022e04                color
-                0x0000000000022e08                freeList
-                0x0000000000022e0c                row
-                0x0000000000022e10                . = ALIGN (0x8)
-                0x0000000000023e10                . = (. + 0x1000)
-                0x0000000000023e10                svc_stack_top = .
-                0x0000000000024e10                . = (. + 0x1000)
-                0x0000000000024e10                irq_stack_top = .
+ .bss           0x0000000000012b0c        0x4 t.o
+                0x0000000000012b0c                release
+ COMMON         0x0000000000012b10    0x10364 t.o
+                0x0000000000012b10                proc
+                0x0000000000022d90                kbd
+                0x0000000000022e24                timer
+                0x0000000000022e48                running
+                0x0000000000022e4c                font
+                0x0000000000022e50                fb
+                0x0000000000022e54                readyQueue
+                0x0000000000022e58                sleepList
+                0x0000000000022e5c                cursor
+                0x0000000000022e60                col
+                0x0000000000022e64                ISP
+                0x0000000000022e68                color
+                0x0000000000022e6c                freeList
+                0x0000000000022e70                row
+                0x0000000000022e78                . = ALIGN (0x8)
+                0x0000000000023e78                . = (. + 0x1000)
+                0x0000000000023e78                svc_stack_top = .
+                0x0000000000024e78                . = (. + 0x1000)
+                0x0000000000024e78                irq_stack_top = .
 LOAD ts.o
 LOAD t.o
 OUTPUT(t.elf elf32-littlearm)

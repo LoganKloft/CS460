@@ -75,7 +75,7 @@ int scheduler()
   color = running->pid;
 
   printf("proc %d ISP=%x ksp=%x cpsr=%x mode=%s\n",
-	  running->pid, ISP, running->ksp);
+	  running->pid, ISP, running->ksp, cpsr, mode);
 }
 
 void kexit()
