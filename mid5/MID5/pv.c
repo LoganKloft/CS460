@@ -25,8 +25,9 @@ int P(struct semaphore *s)
     {
         block(s);
     }
-
     int_on(SR);
+
+    return 1;
 }
 
 int V(struct semaphore *s)
