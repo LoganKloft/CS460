@@ -83,8 +83,8 @@ int scheduler()
   // must switch to new running's pgdir; possibly need also flush TLB
   color = running->pid;
   if (running != old){
-    printf("switch to proc %d pgdir at %x ", running->pid, running->pgdir);
-    printf("pgdir[2048] = %x\n", running->pgdir[2048]);
+    printf("switch to proc %d pgdir at %x\n", running->pid, running->pgdir);
+    kprintf("up0 = %x up1 = %x up2 = %x up3 = %x\n", running->pgdir[2048], running->pgdir[2049], running->pgdir[2050], running->pgdir[2051]);
     switchPgdir((u32)running->pgdir);
   }
 }  
@@ -100,18 +100,47 @@ int kgetppid()
   //kprintf("kgetppid: pppid = %d\n", running->ppid);
   return running->ppid;
 }
-char *pstatus[]={"FREE   ","READY  ","SLEEP  ","BLOCK  ","ZOMBIE", " RUN  "};
+
+char* str_status(PROC* p)
+{
+  if (p == running)
+  {
+    return "RUNNING";
+  }
+  else
+  {
+    switch (p->status)
+    {
+      case FREE:
+        return "FREE";
+        break;
+      case READY:
+        return "READY";
+        break;
+      case SLEEP:
+        return "SLEEP";
+        break;
+      case BLOCK:
+        return "BLOCK";
+        break;
+      case ZOMBIE:
+        return "ZOMBIE";
+        break;
+    }
+  }
+
+  return "ERROR";
+}
+
 int kps()
 {
-  int i; PROC *p; 
-  for (i=0; i<NPROC; i++){
-     p = &proc[i];
-     kprintf("proc[%d]: pid=%d ppid=%d", i, p->pid, p->ppid);
-     if (p==running)
-       printf("%s ", pstatus[5]);
-     else
-       printf("%s", pstatus[p->status]);
-     printf("name=%s\n", p->name);
+  printf("PID\tPPID\tSTATUS\tNAME\n");
+  printf("---\t----\t------\t----\n");
+  for (int i = 0; i < NPROC; i++)
+  {
+    printf(" %d\t %d  \t", proc[i].pid, proc[i].ppid);
+
+    printf("%s\t%s\n", str_status(&proc[i]), proc[i].name);
   }
 }
 

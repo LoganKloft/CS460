@@ -30,6 +30,22 @@ int kfork(char *filename)
   p->parent = running;
   p->status = READY;
   p->priority = 1;
+  p->child = p->sibling = 0;
+
+  // insert into parent
+  if (p->parent->child == 0)
+  {
+    p->parent->child = p;
+  }
+  else
+  {
+    PROC* cur = p->parent->child;
+    while (cur->sibling)
+    {
+      cur = cur->sibling;
+    }
+    cur->sibling = p;
+  }
 
   // build p's pgtable 
   p->pgdir = (int *)(0x600000 + (p->pid - 1)*0x4000);
@@ -49,7 +65,10 @@ int kfork(char *filename)
   // ptable entry flag=|AP=11|0|dom1|1|CB10|=110|0001|1|1110|=0xC3E or 0xC32    
 
   ptable[2048] = 0x800000 + (p->pid - 1)*0x100000|0xC32;   // CB=00
-  // entries 2049 to 4095 all 0 for INVALID
+  ptable[2049] = 0x1000000 + (p->pid - 1)*0x100000|0xC32;
+  ptable[2050] = 0x1800000 + (p->pid - 1)*0x100000|0xC32;
+  ptable[2051] = 0x2000000 + (p->pid - 1)*0x100000|0xC32;
+  // entries 2052 to 4095 all 0 for INVALID
 
   // load filename to Umode image area at 7MB+(pid-1)*1MB
   
@@ -66,8 +85,25 @@ int kfork(char *filename)
 
   p->ksp = &(p->kstack[SSIZE-28]);
 
-  // p->usp = (int *)(0x80100000);
-  p->usp = (int *)VA(0x100000);
+  // p->usp = (int *)(0x80400000);
+  p->usp = (int *)VA(0x400000);
+
+  // very easy to follow code
+  switchPgdir((u32)p->pgdir);
+  char *name = "My name is Logan Kloft";
+  int namelen = strlen(name);
+  p->usp -= namelen;
+  int* start = p->usp + 1;
+  char* cp = start;
+  for(i = 0; i <= namelen; i++)
+  {
+    *cp = name[i];
+    cp++;
+  }
+  *cp = 0;
+  p->kstack[SSIZE - 14] = start;
+  switchPgdir((u32)running->pgdir);
+  
   p->cpsr = (int *)0x10;    // saved cpsr = previous mode was Umode
 
   enqueue(&readyQueue, p);
