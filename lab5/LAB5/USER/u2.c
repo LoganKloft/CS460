@@ -10,10 +10,26 @@ int main(char *s)
 {
    uprintf("VA of string = %x \t string = %s\n", &s, s);
    
+   printf("test memory at 0x1000\n");
+   u32 *up = 0x1000;
+   *up = 123;
+
+   printf("test memory 0x80001000 VA=4KB\n");
+   up = 0x80001000;
+   *up = 1234;
+
+   printf("test memory 0x80100000 VA=1MB\n");
+   up = 0x80001000;
+   *up = 1234;
+
+   printf("test memory 0x80500000 VA=5MB\n");
+   up = 0x80500000;
+   *up = 1234;
+
    int pid, ppid;
    char line[64];
    int r;
-   u32 mode,  *up;
+   u32 mode;
 
    mode = get_cpsr();
    mode = mode & 0x1F;

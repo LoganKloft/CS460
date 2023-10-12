@@ -21,9 +21,21 @@ int svc_handler(int a, int b, int c, int d)
         // 6: wait
       case 6: r = kwait((int *)b); break;
         // 7: exit
-      case 7: r = kexit(b); break;
+      case 7: 
+        if (running->pid == 1) {
+          printf("P1 can't exit by command\n");
+          break;
+        }
+        r = kexit(b); 
+        break;
         // 8: sleep
-      case 8: r = ksleep(b); break;
+      case 8: 
+        if (running->pid == 1) {
+          printf("P1 can't sleep by command\n");
+          break;
+        }
+        r = ksleep(b); 
+        break;
         // 9: wakeup
       case 9: r = kwakeup(b); break;
         
