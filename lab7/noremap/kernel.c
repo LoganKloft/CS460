@@ -41,7 +41,8 @@ int kernel_init()
   for (j=0; j<4096; j++)        // clear mtable entries to 0
     mtable[j] = 0;
 
-  mtable[0] = MTABLE[0]; // NEED the low 1MB for vectors and handler entries
+  // mtable[0] = MTABLE[0]; // NEED the low 1MB for vectors and handler entries
+  mtable[4095] = MTABLE[4095]; // NEED the HIGH 1MB for vectors and handler entries
 
   for (j=2048; j<2048+258; j++){  // last 258 entries copy from MTABLE
       mtable[j] = MTABLE[j];

@@ -53,6 +53,8 @@ load(char *filename, PROC *p)
   
   addr = (char *)(0x800000 + (p->pid - 1)*0x100000);
   addr = VA(addr);
+
+  printf("here\n");
   
   /* read blk#2 to get group descriptor 0 */
   getblock(2, buf1);

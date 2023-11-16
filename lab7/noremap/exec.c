@@ -1,4 +1,4 @@
-#define UPN 1
+#define UPN 0
 #define UVA UPN*0x100000
 
 int exec(char *uline)

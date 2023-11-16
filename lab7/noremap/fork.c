@@ -4,7 +4,7 @@ char *istring = "init start";
 
 int *mtable = (int *)0x80500000; // P0's pgtable at 5MB
 
-#define UPN 1
+#define UPN 0
 #define UVA UPN*0x100000
 
 PROC *kfork(char *filename)
@@ -30,8 +30,8 @@ PROC *kfork(char *filename)
     p->pgdir[i] = mtable[i];
   }
   
-  // only entry 1 is for UMODE image 
-  p->pgdir[UPN]=(0x800000 + (p->pid-1)*0x100000) | 0xC32; // entry 1 Umode
+  // only entry 0 is for UMODE image CHANGED BY LOGAN
+  p->pgdir[UPN]=(0x800000 + (p->pid-1)*0x100000) | 0xC32; // entry 0 Umode
 
   load(filename, p); // p->PROC containing pid, pgdir, etc
 
@@ -42,7 +42,7 @@ PROC *kfork(char *filename)
   p->kstack[SSIZE-15] = (int)goUmode;  // in dec reg=address ORDER !!!
   p->ksp = &(p->kstack[SSIZE-28]);
  
-  BA = p->pgdir[1] & 0xFFFF0000;
+  BA = p->pgdir[UPN] & 0xFFFF0000; // CHANGED BY LOGAN
   Btop = BA + 0x100000;
   Busp = Btop - 128 + 0x80000000;
   // printf("BA=%x Busp=%x\n", BA, Busp);
@@ -92,18 +92,18 @@ int fork()
     p->pgdir[i] = mtable[i];
   }
   
-  // entry 1 is for UMODE image
-  p->pgdir[1]=(0x800000 + (p->pid-1)*0x100000) | 0xC32; // entry 1 Umode    
+  // entry 1 is for UMODE image CHANGED BY LOGAN
+  p->pgdir[UPN]=(0x800000 + (p->pid-1)*0x100000) | 0xC32; // entry 1 Umode    
 
   //printf("running usp=%x linkR=%x\n", running->usp, running->upc);
 
-  PBA = (running->pgdir[1] & 0xFFFF0000);
+  PBA = (running->pgdir[UPN] & 0xFFFF0000); // CHANGED BY LOGAN
   PBA += 0x80000000;
   PBtop = PBA + 0x100000;  // top of 1MB Uimage
 
   printf("FORK: parent %d uimage at %x\n", running->pid, PBA);
  
-  CBA = (p->pgdir[1] & 0xFFFF0000);
+  CBA = (p->pgdir[UPN] & 0xFFFF0000); // CHANGED BY LOGAN
   CBA += 0x80000000;
   CBtop = CBA + 0x100000;  // top of 1MB Uimage
   printf("FORK: child  %d uimage at %x\n", p->pid, CBA);
