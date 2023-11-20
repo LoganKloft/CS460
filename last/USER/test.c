@@ -1,18 +1,16 @@
-/******* test.c file *********/
 
 #include "ucode.c"
+
+char tline[128];
 
 int main(int argc, char *argv[ ])
 {
   int i;
-  printf("this is KCW's NEW test\n");
-  
-  printf("print argc, argv\n");
+  printf("this is a test\n");
 
-  printf("argc=%d\n", argc);
+  printf("argc = %d\n");
   
   for (i=0; i<argc; i++)
     printf("argv[%d] = %s\n", i, argv[i]);
 
-  // optional: exit(0);
 }
