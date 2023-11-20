@@ -1,41 +1,62 @@
-// simple init.c as in BOOK
-
 #include "ucode.c"
+int console1;
+int console2;
+int console3;
 
-int console;
-        
 int parent()
 {
-  int pid, status;
+    int pid, status;
+    while (1) {
+        printf("INIT : wait for ZOMBIE child\n");
+        pid = wait(&status);
 
-  while(1){
-    printf("KCINIT : waiting for ZOMBIE child\n");
-    pid = wait(&status);
-
-    if (pid==console){
-      printf("INIT fork a new console login\n");
-       console = fork();
-       if (console)
-	 continue;
-       else
-	 exec("login /dev/tty0");
+        if (pid == console1) {
+            // console 1
+            printf("INIT: forks a new console login\n");
+            console1 = fork();
+            if (!console1) exec("login /dev/tty0");
+            continue;
+        }
+        else if (pid == console2) {
+            // console 2
+            printf("INIT: forks a new console login\n");
+            console2 = fork();
+            if (!console2) exec("login /dev/ttyS0");
+            continue;
+        }
+        else if (pid == console3) {
+            // console 3
+            printf("INIT: forks a new console login\n");
+            console3 = fork();
+            if (!console3) exec("login /dev/ttyS1");
+            continue;
+        }
+        printf("INIT: I just buried an orphan child proc %d\n", pid);
     }
-    printf("KCINIT: I just buried an orphan child task %d\n", pid);
-  }
 }
 
-int main(int argc, char *argv[ ])
+// fork tty0, ttyS0, ttyS1
+int main()
 {
-  int in, out;
-  in  = open("/dev/tty0", O_RDONLY);
-  out = open("/dev/tty0", O_WRONLY);
+    int in, out;
 
-  printf("KCW's SIMPLE INIT : fork a login proc on console\n");
+    in = open("/dev/tty0", O_RDONLY);
+    out = open("/dev/tty0", O_WRONLY);
 
-  console = fork();
-  if (console)      // parent
+    // console 1
+    printf("INIT : fork a login proc on /dev/tty0\n");
+    console1 = fork();
+    if (!console1) exec("login /dev/tty0");
+
+    // console 2
+    printf("INIT : fork a login proc on /dev/ttyS0\n");
+    console2 = fork();
+    if (!console2) exec("login /dev/ttyS0");
+
+    // console 3
+    printf("INIT : fork a login proc on /dev/ttyS1\n");
+    console3 = fork();
+    if (!console3) exec("login /dev/ttyS1");
+
     parent();
-  else
-    exec("login /dev/tty0");
 }
-
