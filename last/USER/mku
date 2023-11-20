@@ -10,7 +10,7 @@ arm-none-eabi-objcopy -O binary $1.elf $1
 
 sudo mount -o loop ../sdimage /mnt
 sudo cp -av $1 /mnt/bin
-#ls -l /mnt/bin
+ls -l /mnt/bin
 sudo umount /mnt
 
 rm $1

@@ -23,6 +23,8 @@ typedef unsigned int   u32;
 #include "crt0.c"
 #include "string.c"
 
+#define BLKSIZE 1024
+
 int pid;
 char line[64], pathname[32], i2[32], i3[32];
 char *name[16], components[64];
@@ -322,6 +324,11 @@ int fixtty(char *tty)
    return syscall(40, tty, 0);
 }
 
+int settty(char *tty)
+{
+  return syscall(40, tty, 0);
+}
+
 int gettty(char *tty)
 {
    return syscall(41, tty, 0);
@@ -543,4 +550,63 @@ int strcasecmp(char *s1, char *s2)
   }
   //printf("t2=%s\n", t1, t2);
   return strcmp(t1, t2);
+}
+
+// Logan's additions
+
+char* strtok(char *str, const char* delims)
+{
+  static char* start = 0;
+  char* result = start;
+
+  if (str) start = str;
+
+  // we skip delims when starting
+  while (*start)
+  {
+    int foundDelim = 0;
+    for (int i = 0; delims[i]; i++)
+    {
+      if (*start == delims[i])
+      {
+        foundDelim = 1;
+        break;
+      }
+    }
+    if (!foundDelim)
+    {
+      break;
+    }
+    start++;
+  }
+
+  if (*start == 0) return 0;
+  result = start;
+
+  // now we must find next delimiter
+  while (*start)
+  {
+    int foundDelim = 0;
+    for (int i = 0; delims[i]; i++)
+    {
+      if (*start == delims[i])
+      {
+        foundDelim = 1;
+        break;
+      }
+    }
+    if (foundDelim)
+    {
+      break;
+    }
+    start++;
+  }
+
+  if (*start != 0)
+  {
+    *start = 0;
+    start++;
+  }
+  
+  return result;
 }
