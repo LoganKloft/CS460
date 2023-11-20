@@ -1,0 +1,27 @@
+# sdimage is a disk image containing an EXT2 FS
+# generate u1, u2 and copy to /bin of sdimage
+(cd USER; sudo ./mku u1; sudo ./mku u2)
+
+echo compile-link: kernel to 0x80010000 Kernel Mapped High to 2GB
+arm-none-eabi-as -mcpu=arm926ej-s ts.s -o ts.o
+arm-none-eabi-gcc -c -mcpu=arm926ej-s t.c -o t.o
+arm-none-eabi-ld -T t.ld ts.o t.o -Ttext=0x80010000 -o t.elf
+arm-none-eabi-objcopy -O binary t.elf t.bin
+
+rm *.o *.elf
+
+echo ready to go?
+#read dummy
+
+qemu-system-arm -M versatilepb -m 128M -sd sdimage -kernel t.bin -serial mon:stdio
+
+
+
+
+
+
+ 
+
+
+
+
