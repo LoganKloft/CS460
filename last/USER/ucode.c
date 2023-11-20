@@ -610,3 +610,20 @@ char* strtok(char *str, const char* delims)
   
   return result;
 }
+
+// give a buffer of characters, tokens array, the length of tokens, and delims
+// tokenize will strtok the buffer using delims up to tcount times - thus editing it
+// will store the results of strtok in tokens - thus editing it
+// will return the number of tokens generated, return 0 if none generated
+int tokenize(char* buffer, char** tokens, int tcount, char* delims)
+{
+  int n = 0;
+  char* token = strtok(buffer, delims);
+  while (token != 0 && n < tcount)
+  {
+    tokens[n] = token;
+    n++;
+    token = strtok(0, delims);
+  }
+  return n;
+}
