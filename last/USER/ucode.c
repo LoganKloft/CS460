@@ -627,3 +627,43 @@ int tokenize(char* buffer, char** tokens, int tcount, char* delims)
   }
   return n;
 }
+
+int S_ISDIR(u16 mode)
+{
+  return (mode & 0xF000) == 0x4000;
+}
+
+int S_ISREG(u16 mode)
+{
+  return (mode & 0xF000) == 0x8000;
+}
+
+int S_ISLNK(u16 mode)
+{
+  return (mode & 0xF000) == 0xA000;
+}
+
+int basename(char* filename, char* bname)
+{
+  int len = strlen(filename);
+
+  // ignore trailing '/'
+  while (filename[len - 1] == '/') len--;
+
+  // find first '/' from the right
+  int i;
+  for (i = len - 1; i >= 0; i--)
+  {
+    if (filename[i] == '/') break;
+  }
+  i++; // we break on i when at '/' or when i == -1
+       // in both cases we want to move back to previous loc
+
+  // copy from i to the right
+  int j = 0;
+  for(; i < len; i++, j++)
+  {
+    bname[j] = filename[i];
+  }
+  bname[j] = 0;
+}
