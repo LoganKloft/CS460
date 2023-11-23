@@ -628,6 +628,21 @@ int tokenize(char* buffer, char** tokens, int tcount, char* delims)
   return n;
 }
 
+int S_PATTERN(u16 mode)
+{
+  return (mode & 0xF000);
+}
+
+int S_ISFIFO(u16 mode)
+{
+  return (mode & 0xF000) == 0xF000;
+}
+
+int S_ISCHR(u16 mode)
+{
+  return (mode & 0xF000) == 0x2000;
+}
+
 int S_ISDIR(u16 mode)
 {
   return (mode & 0xF000) == 0x4000;
