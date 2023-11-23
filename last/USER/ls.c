@@ -77,6 +77,8 @@ int ls_dir(char *dname)
         dirent = cp;
         bzero(name, 256);
     }
+
+    close(fd);
 }
 
 int main(int argc, char* argv[])
