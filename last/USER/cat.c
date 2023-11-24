@@ -1,40 +1,5 @@
 #include "ucode.c"
 
-int isFromStdin(int argc, char* argv[])
-{
-    // if argc == 1
-    // argc[1] == "<"
-    // argc[1] == ">"
-    // argc[1] == ">>"
-    // otherwise a file is assumed to be specified
-    // and if file specified, we aren't reading from stdin
-    if (argc == 1) return 1;
-    if (argv[1][0] == '<') return 1;
-    if (argv[1][0] == '>') return 1;
-
-    return 0;
-}
-
-int isFromUser(int argc, char* argv[])
-{
-    if (argc == 1) return 1;
-    if (argv[1][0] == '>') return 1;
-
-    return 0;
-}
-
-int isToFile(int argc, char* argv[])
-{
-    // if we see ">"
-    // if we see ">>"
-    for (int i = 0; i < argc; i++)
-    {
-        if (argv[i][0] == '>') return 1;
-    }
-
-    return 0;
-}
-
 int main(int argc, char* argv[])
 {
     char buf[BLKSIZE];
