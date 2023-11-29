@@ -101,6 +101,7 @@ int do_command(char* line)
 
 int main(int argc, char *argv[])
 {
+    signal(2, 1); // Control-C does not KILL sh
     int pid;
     int status;
     char cwd[128];

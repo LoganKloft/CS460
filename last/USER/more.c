@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
     if (from_pipe_or_file)
     {
         int lines_read = 0;
-        int lines_needed = 25;
+        int lines_needed = 24;
         char line[80];
         int line_index = 0;
         int r;
@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
                     read(gd, &c, 1);
                     if (c == ' ') {
                         lines_read = 0;
-                        lines_needed = 25;
+                        lines_needed = 24;
                         break;
                     }
                     else if (c == '\r') {
@@ -89,7 +89,8 @@ int main(int argc, char* argv[])
 
             while (lines_read < lines_needed)
             {
-                // we get 80 characters 25 times
+                // we get 80 characters 24 times
+                // because the 25th line is where our cursor is
                 // if we see '\n' then this ends the line
                 while (cp < stop)
                 {
